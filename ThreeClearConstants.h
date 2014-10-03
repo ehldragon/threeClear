@@ -39,4 +39,8 @@ static const int MAP_START_Y = 100;
 static const int TILE_WIDTH = 66;
 static const int TILE_HEIGHT = 66;
 
+/**瓦片显示类型的状态*/
+static const int TILE_SHOW_NONE = 0;
+static const int TILE_SHOW_DEFAULT = 1;
+
 #endif

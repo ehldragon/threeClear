@@ -14,8 +14,8 @@ bool ThreeClearMap::init(){
 	if(!CCLayer::init()){
 		return false;
 	}
-	testInit();
-	mapInit();
+ 	testInit();
+ 	mapInit();
 	return true;
 }
 
@@ -23,44 +23,44 @@ bool ThreeClearMap::testInit()
 {
 	for(int r=0;r<MAP_ROW_COUNT;r++){
 		for(int c=0;c<MAP_COL_COUNT;c++){
-			ThreeClearTile* tile = ThreeClearTile::create();
+			TCTile* tile = TCTile::create();
 			m_map[r][c] = tile;
-			if(0==r){
-				tile->set(r, c, 0);
+			tile->setMatrix(r, c);
+			if(0 == r){
+				tile->setShow(0);
 				continue;
 			}
+			tile->setShow(1);
 
-			tile->set(r, c, 1);
-
-			if(1==c){
-				tile->setTrap(TILE_TRAP_ICE);
-			}
-			if(2==c){
-				tile->setTrap(TILE_TRAP_STONE);
-			}
-			if(3==c){
-				tile->setTrap(TILE_TRAP_DOUBLE_ICE);
-			}
+// 			if(1 == c){
+// 				tile->setTrap(TILE_TRAP_ICE);
+// 			}
+// 			if(2 == c){
+// 				tile->setTrap(TILE_TRAP_STONE);
+// 			}
+// 			if(3 == c){
+// 				tile->setTrap(TILE_TRAP_DOUBLE_ICE);
+// 			}
 		}
 	}
 	return true;
 }
-
-
+// 
+// 
 bool ThreeClearMap::mapInit(){
 	if(!m_map){
 		return false;
 	}
 	for(int r = 0;r < MAP_ROW_COUNT; r++){
 		for(int c = 0; c < MAP_COL_COUNT; c++){
-			ThreeClearTile* tile = m_map[r][c];
+			TCTile* tile = m_map[r][c];
 			CCPoint point = getPoint(r, c);
 
 			// 瓦片背景
 			int show = tile->getShow();
 			CCSprite* showSprite = NULL;
 			if(0 == show){
-				showSprite = CCSprite::create();
+				showSprite = CCSprite::create("show0.png");
 			}
 			else{
 				showSprite = CCSprite::create("show1.png");
@@ -69,35 +69,35 @@ bool ThreeClearMap::mapInit(){
 			addChild(showSprite, MAP_ZORDER_SHOW);
 			
 			// 瓦片陷阱
-			int trap = tile->getTrap();
-			if(TILE_TRAP_EMPTY != trap){
-				CCSprite* trapSprite = NULL;
-				if(TILE_TRAP_ICE == trap){
-					trapSprite= CCSprite::create("ice.png");
-				}
-				else if(TILE_TRAP_DOUBLE_ICE == trap){
-					trapSprite= CCSprite::create("double_ice.png");
-				}
-				else if(TILE_TRAP_STONE == trap){
-					trapSprite= CCSprite::create("stone.png");
-				}
-				trapSprite->setPosition(point);
-				addChild(trapSprite, MAP_ZORDER_TRAP);
-			}
+// 			int trap = tile->getTrap();
+// 			if(TILE_TRAP_EMPTY != trap){
+// 				CCSprite* trapSprite = NULL;
+// 				if(TILE_TRAP_ICE == trap){
+// 					trapSprite= CCSprite::create("ice.png");
+// 				}
+// 				else if(TILE_TRAP_DOUBLE_ICE == trap){
+// 					trapSprite= CCSprite::create("double_ice.png");
+// 				}
+// 				else if(TILE_TRAP_STONE == trap){
+// 					trapSprite= CCSprite::create("stone.png");
+// 				}
+// 				trapSprite->setPosition(point);
+// 				addChild(trapSprite, MAP_ZORDER_TRAP);
+// 			}
 
 			// 瓦片元素
-			ThreeClearElement* element = tile->getElement();
-			if(element){
-				element->setPosition(point); //TODO 这里不应该是直接放置好，应该在地图的上面往下掉落
-				addChild(element, MAP_ZORDER_ELEMENT);
-			}
-
-			// 笼子
-			CCSprite* lockSprite = tile->getLockSprite();
-			if(lockSprite){
-				lockSprite->setPosition(point);
-				addChild(lockSprite, MAP_ZORDER_LOCK);
-			}
+//			TCElement* element = tile->getElement();
+// 			if(element){
+// 				element->setPosition(point); //TODO 这里不应该是直接放置好，应该在地图的上面往下掉落
+// 				addChild(element, MAP_ZORDER_ELEMENT);
+// 			}
+// 
+// 			// 笼子
+// 			CCSprite* lockSprite = tile->getLockSprite();
+// 			if(lockSprite){
+// 				lockSprite->setPosition(point);
+// 				addChild(lockSprite, MAP_ZORDER_LOCK);
+// 		
 		}
 	}
 	return true;

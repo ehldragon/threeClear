@@ -6,15 +6,15 @@ USING_NS_CC;
 
 #include "ThreeClearConstants.h"
 
-#include "ThreeClearTile.h"
+#include "sprite/TCTile.h"
 
 /** 
  * 游戏格子地图，所有消除元素都在地图数组中
  */
 class ThreeClearMap : public CCLayer{
 private:
-	/**地图数组*/
-	ThreeClearTile* m_map[MAP_ROW_COUNT][MAP_COL_COUNT];
+	/**地图瓦片数组*/
+	TCTile* m_map[MAP_ROW_COUNT][MAP_COL_COUNT];
 
 private:
 	ThreeClearMap();
