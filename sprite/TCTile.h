@@ -15,6 +15,7 @@ USING_NS_CC;
 class TCTile : public CCSprite{
 public:
 	CREATE_FUNC(TCTile);
+	static TCTile* create(int showValue, TCElementBase *element);
 	~TCTile();
 
 	bool init();
@@ -23,7 +24,6 @@ public:
 	 * 元素是否可以掉入此瓦片中
 	 */
 	bool isEmpty();
-
 	/**
 	* 清除操作
 	*/
@@ -40,7 +40,7 @@ public:
 	void setMatrix(int row, int col);
 
 private:
-
+	bool initWithShowValue(int showValue);
 	TCTile();
 	/**所在行*/
 	int m_row;

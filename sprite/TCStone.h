@@ -19,7 +19,7 @@ private:
 	
 public:
 	~TCStone();
-	CREATE_FUNC(TCStone);
+	static TCStone* create();
 
 	bool init();
 

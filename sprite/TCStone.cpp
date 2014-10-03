@@ -10,6 +10,18 @@ TCStone::~TCStone()
 
 }
 
+TCStone* TCStone::create()
+{
+	TCStone *stoneSprite = new TCStone();
+	if (stoneSprite && stoneSprite->initWithFile("stone.png"))
+	{
+		stoneSprite->autorelease();
+		return stoneSprite;
+	}
+	CC_SAFE_DELETE(stoneSprite);
+	return NULL;
+}
+
 bool TCStone::init()
 {
 	if(!TCElementBase::init()){

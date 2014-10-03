@@ -14,6 +14,30 @@ TCTile::~TCTile()
 	CC_SAFE_RELEASE_NULL(m_element);
 }
 
+TCTile* TCTile::create(int showValue, TCElementBase *element)
+{
+	TCTile *tile = new TCTile();
+	if (tile && tile->initWithShowValue(showValue))
+	{
+		tile->autorelease();
+		tile->setElement(element);
+		return tile;
+	}
+	CC_SAFE_DELETE(tile);
+	return NULL;
+}
+
+bool TCTile::initWithShowValue(int showValue)
+{
+	m_show = showValue;
+	if(0 == showValue){
+		return this->initWithFile("show0.png");
+	}
+	else{
+		return this->initWithFile("show1.png");
+	}
+}
+
 bool TCTile::init()
 {
 	if(!CCSprite::init()){
@@ -42,6 +66,11 @@ int TCTile::getShow()
 
 void TCTile::setElement(TCElementBase *element)
 {
+	if(element == NULL)
+	{
+		CC_SAFE_RELEASE_NULL(m_element);
+		return;
+	}
 	element->retain();
 	if(m_element != NULL)
 	{
@@ -73,6 +102,12 @@ void TCTile::setMatrix(int row, int col)
 void TCTile::setShow(int value)
 {
 	m_show = value;
+	if(0 == value){
+		this->initWithFile("show0.png");
+	}
+	else{
+		this->initWithFile("show1.png");
+	}
 }
 
 

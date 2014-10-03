@@ -18,7 +18,8 @@ private:
 	TCIce();
 	
 public:
-	CREATE_FUNC(TCIce);
+	static TCIce* create();
+	static TCIce* create(int times);
 	~TCIce();
 
 	bool init();

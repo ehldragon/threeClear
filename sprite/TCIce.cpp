@@ -11,6 +11,34 @@ TCIce::~TCIce()
 
 }
 
+TCIce* TCIce::create()
+{
+	TCIce *iceSprite = create(1);
+	return iceSprite;
+}
+
+TCIce* TCIce::create(int times)
+{
+	TCIce *iceSprite = new TCIce();
+	iceSprite->m_times = times;
+	char *fileName = NULL;
+	if(times == 1)
+	{
+		fileName = "ice.png";
+	}
+	else
+	{
+		fileName = "double_ice.png";
+	}
+	if (iceSprite && iceSprite->initWithFile(fileName))
+	{
+		iceSprite->autorelease();
+		return iceSprite;
+	}
+	CC_SAFE_DELETE(iceSprite);
+	return NULL;
+}
+
 bool TCIce::init()
 {
 	if(!TCElementBase::init()){
