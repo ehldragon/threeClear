@@ -43,4 +43,7 @@ static const int TILE_HEIGHT = 66;
 static const int TILE_SHOW_NONE = 0;
 static const int TILE_SHOW_DEFAULT = 1;
 
+/**能引发交换的最小滑动位移*/
+static const int SWAP_OFFSET_LIMIT = 36;
+
 #endif

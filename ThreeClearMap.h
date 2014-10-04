@@ -16,11 +16,30 @@ private:
 	/**地图瓦片数组*/
 	TCTile* m_map[MAP_ROW_COUNT][MAP_COL_COUNT];
 
+	/**选中的行列索引*/
+	CCPoint m_selectedPoint;
+	int m_selectedRow;
+	int m_selectedCol;
+
 private:
 	ThreeClearMap();
 	bool testInit();
 	bool mapInit();
 
+	/** 
+	 * 交换
+	 */
+	void swap(int srcRow, int srcCol, int dstRow, int dstCol);
+
+	/** 
+	 * 是否是合法的行列索引
+	 */
+	bool isValidRowCol(int row, int col);
+
+	/** 
+	 * 判断一个行列对应的瓦块，是否是可以被移动交换的
+	 */
+	bool canTileSwap(int row, int col);
 public:
 	CREATE_FUNC(ThreeClearMap);
 	~ThreeClearMap();
@@ -47,7 +66,13 @@ public:
 	 */
 	CCPoint getPoint(int row, int col);
 
+	
 private:
+	// 触摸事件：按下
+	void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
+
+	// 触摸事件：移动
+	void ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
 
 };
 

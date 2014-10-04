@@ -31,10 +31,10 @@ bool TCTile::initWithShowValue(int showValue)
 {
 	m_show = showValue;
 	if(0 == showValue){
-		return this->initWithFile("show0.png");
+		return this->initWithFile("threeclear/show0.png");
 	}
 	else{
-		return this->initWithFile("show1.png");
+		return this->initWithFile("threeclear/show1.png");
 	}
 }
 
@@ -57,6 +57,14 @@ bool TCTile::isEmpty()
 		return m_element->allowMoveIn();
 	}
 	return true;
+}
+
+int TCTile::getRow(){
+	return m_row;
+}
+
+int TCTile::getCol(){
+	return m_col;
 }
 
 int TCTile::getShow()
@@ -103,10 +111,10 @@ void TCTile::setShow(int value)
 {
 	m_show = value;
 	if(0 == value){
-		this->initWithFile("show0.png");
+		this->initWithFile("threeclear/show0.png");
 	}
 	else{
-		this->initWithFile("show1.png");
+		this->initWithFile("threeclear/show1.png");
 	}
 }
 

@@ -17,6 +17,7 @@ bool ThreeClearMap::init(){
 	}
  	testInit();
  	mapInit();
+	setTouchEnabled(true);
 	return true;
 }
 
@@ -28,10 +29,10 @@ bool ThreeClearMap::testInit()
 			m_map[r][c] = tile;
 			tile->setMatrix(r, c);
 			if(0 == r){
-				tile->setShow(0);
+				tile->setShow(TILE_SHOW_NONE);
 				continue;
 			}
-			tile->setShow(1);
+			tile->setShow(TILE_SHOW_DEFAULT);
 
 			TCElementBase *element = NULL;
  			if(1 == c){
@@ -41,16 +42,15 @@ bool ThreeClearMap::testInit()
 				element = TCStone::create();
 			}
 			if(3 == c){
+				element = TCStone::create();
+			}
+			if(4 == c){
 				element = TCIce::create(2);
 			}
 	
 			if(element != NULL)
 			{
 				tile->setElement(element);
-				CCSize size = tile->getContentSize();
-				CCPoint point = CCPointMake(size.width / 2, size.height / 2);
-				element->setPosition(point);
-				tile->addChild(element, 1);
 			}
 		}
 	}
@@ -66,8 +66,15 @@ bool ThreeClearMap::mapInit(){
 		for(int c = 0; c < MAP_COL_COUNT; c++){
 			TCTile* tile = m_map[r][c];
 			CCPoint point = getPoint(r, c);
+			//布局瓦块和element
 			tile->setPosition(point);
 			addChild(tile, MAP_ZORDER_SHOW);
+			TCElementBase *element = tile->getElement();
+			if(element != NULL)
+			{
+				element->setPosition(point);
+				addChild(element, MAP_ZORDER_SHOW);
+			}
 		}
 	}
 	return true;
@@ -91,3 +98,129 @@ cocos2d::CCPoint ThreeClearMap::getPoint(int row, int col)
 	return p;
 }
 
+void ThreeClearMap::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent){
+	CCSetIterator it = pTouches->begin();
+	CCTouch* touch = (CCTouch*)(*it);
+	m_selectedPoint = touch->getLocation();
+	int col = (m_selectedPoint.x - MAP_START_X)/TILE_WIDTH;
+	int row = (m_selectedPoint.y - MAP_START_Y)/TILE_HEIGHT;
+	m_selectedRow = MAP_ROW_COUNT - row;
+	m_selectedCol = col;
+	if(!canTileSwap(m_selectedRow,m_selectedCol)){
+		m_selectedRow = -1;
+		m_selectedCol = -1;
+	}
+}
+
+void ThreeClearMap::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
+	if(!canTileSwap(m_selectedRow,m_selectedCol)){
+		return;// 不合法的选中行列索引
+	}
+	CCSetIterator it = pTouches->begin();
+	CCTouch* touch = (CCTouch*)(*it);
+	CCPoint p = touch->getLocation();
+	float offsetX = p.x - m_selectedPoint.x;
+	float offsetY = p.y - m_selectedPoint.y;
+
+	// 横向交换
+	if(abs(offsetX)>SWAP_OFFSET_LIMIT && abs(offsetX) > abs(offsetY)){
+		int dstRow = -1;
+		int dstCol = -1;
+		// 向右交换
+		if(offsetX>0){
+			dstRow = m_selectedRow;
+			dstCol = m_selectedCol + 1;
+		}
+		else{ // 向左交换
+			dstRow = m_selectedRow;
+			dstCol = m_selectedCol - 1;
+		}
+
+		if(!canTileSwap(dstRow,dstCol)){
+			return;// 目标行列索引不合法，返回
+		}
+ 
+		swap(m_selectedRow, m_selectedCol, dstRow, dstCol);
+		m_selectedRow = -1;
+		m_selectedCol = -1;
+		return;
+	}
+
+	// 竖向交换
+	if(abs(offsetY)>SWAP_OFFSET_LIMIT && abs(offsetY) > abs(offsetX)){
+		int dstRow = -1;
+		int dstCol = -1;
+		// 向下交换
+		if(offsetY>0){
+			dstRow = m_selectedRow - 1;
+			dstCol = m_selectedCol;
+		}
+		else{ // 向上交换
+			dstRow = m_selectedRow + 1;
+			dstCol = m_selectedCol;
+		}
+		
+		if(!canTileSwap(dstRow,dstCol)){
+			return;// 目标行列索引不合法，返回
+		}
+		swap(m_selectedRow, m_selectedCol, dstRow, dstCol);
+		m_selectedRow = -1;
+		m_selectedCol = -1;
+		return;
+	}
+}
+
+void ThreeClearMap::swap(int srcRow, int srcCol, int dstRow, int dstCol){
+	if(!canTileSwap(srcRow,srcCol)){
+		return;// 行列索引不合法，返回
+	}
+	if(!canTileSwap(dstRow,dstCol)){
+		return;// 行列索引不合法，返回
+	}
+	
+	TCTile* srcTile = m_map[srcRow][srcCol];
+	TCTile* dstTile = m_map[dstRow][dstCol];
+
+	TCElementBase *srcElement = srcTile->getElement();
+	TCElementBase *dstElement = dstTile->getElement();
+	//srcTile->setVisible(false);
+	//dstTile->setVisible(false);
+
+	CCPoint srcPoint = getPoint(srcTile->getRow(), srcTile->getCol());
+	CCPoint dstPoint = getPoint(dstTile->getRow(), dstTile->getCol());
+	
+	srcElement->runAction(CCSequence::create(
+		CCMoveTo::create(0.2f, dstPoint),
+		CCMoveTo::create(0.2f, srcPoint),
+		NULL));
+	dstElement->runAction(CCSequence::create(
+		CCMoveTo::create(0.2f, srcPoint),
+		CCMoveTo::create(0.2f, dstPoint),
+		NULL));
+}
+
+bool ThreeClearMap::isValidRowCol(int row, int col){
+	if(row<0 || row>=MAP_ROW_COUNT){
+		return false;
+	}
+	if(col<0 || col>=MAP_COL_COUNT){
+		return false;
+	}
+	return true;
+}
+
+bool ThreeClearMap::canTileSwap(int row, int col)
+{
+	if(!isValidRowCol(row, col)){
+		return false;// 行列索引不合法，返回
+	}
+	TCTile* tile = m_map[row][col];
+	TCElementBase *element = tile->getElement();
+	//镂空的瓦块，以及没有element的空瓦块，都是不可以交换的。
+	if(tile->getShow() == TILE_SHOW_NONE ||  element == NULL)
+	{
+		return false;
+	}
+	//由element决定能否被移动交换
+	return element->canMove();
+}

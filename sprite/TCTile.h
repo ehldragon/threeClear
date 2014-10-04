@@ -30,6 +30,8 @@ public:
 	bool clear();
 
 	////////////////
+	int getRow();
+	int getCol();
  	int getShow();
 	void setShow(int value);
 	void setElement(TCElementBase *element);

@@ -24,11 +24,11 @@ TCIce* TCIce::create(int times)
 	char *fileName = NULL;
 	if(times == 1)
 	{
-		fileName = "ice.png";
+		fileName = "threeclear/ice.png";
 	}
 	else
 	{
-		fileName = "double_ice.png";
+		fileName = "threeclear/double_ice.png";
 	}
 	if (iceSprite && iceSprite->initWithFile(fileName))
 	{

@@ -13,7 +13,7 @@ TCStone::~TCStone()
 TCStone* TCStone::create()
 {
 	TCStone *stoneSprite = new TCStone();
-	if (stoneSprite && stoneSprite->initWithFile("stone.png"))
+	if (stoneSprite && stoneSprite->initWithFile("threeclear/stone.png"))
 	{
 		stoneSprite->autorelease();
 		return stoneSprite;

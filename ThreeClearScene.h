@@ -9,11 +9,11 @@ private:
 	
 private:
 	ThreeClearScene();
-	~ThreeClearScene();
-
+	
 public:
+	~ThreeClearScene();
 	CREATE_FUNC(ThreeClearScene);
-
+	
 	bool init();
 
 private:
