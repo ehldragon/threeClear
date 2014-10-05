@@ -181,8 +181,9 @@ void ThreeClearMap::swap(int srcRow, int srcCol, int dstRow, int dstCol){
 	TCTile* srcTile = m_map[srcRow][srcCol];
 	TCTile* dstTile = m_map[dstRow][dstCol];
 
-	TCElementBase *srcElement = srcTile->getElement();
-	TCElementBase *dstElement = dstTile->getElement();
+	//获取每个瓦块中，真正能够被提取出来移动交换的element
+	TCElementBase *srcElement = srcTile->getMoveElement();
+	TCElementBase *dstElement = dstTile->getMoveElement();
 	//srcTile->setVisible(false);
 	//dstTile->setVisible(false);
 
@@ -215,12 +216,11 @@ bool ThreeClearMap::canTileSwap(int row, int col)
 		return false;// 行列索引不合法，返回
 	}
 	TCTile* tile = m_map[row][col];
-	TCElementBase *element = tile->getElement();
-	//镂空的瓦块，以及没有element的空瓦块，都是不可以交换的。
-	if(tile->getShow() == TILE_SHOW_NONE ||  element == NULL)
-	{
-		return false;
+	if(tile != NULL){
+		return tile->canMove();
 	}
-	//由element决定能否被移动交换
-	return element->canMove();
+	return false;
 }
+
+
+

@@ -20,6 +20,11 @@ bool TCElementBase::init()
 	return true;
 }
 
+TCElementBase* TCElementBase::getMoveElement()
+{
+	return this;
+}
+
 void TCElementBase::setFillingElement(TCElementBase *element)
 {
 	element->retain();
@@ -56,5 +61,6 @@ bool TCElementBase::canMove()
 {
 	return true;
 }
+
 
 

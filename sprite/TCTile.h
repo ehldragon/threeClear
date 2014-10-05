@@ -24,10 +24,23 @@ public:
 	 * 元素是否可以掉入此瓦片中
 	 */
 	bool isEmpty();
+
+	/** 
+	 *判断瓦片是否是可移动交换element
+	 */
+	bool canMove();
+
+	/** 
+	 *判断瓦片是否是可消除
+	 */
+	bool canClear();
 	/**
 	* 清除操作
 	*/
 	bool clear();
+	
+	/*** 获取能够移动的对象*/
+	TCElementBase* getMoveElement();
 
 	////////////////
 	int getRow();
@@ -36,6 +49,7 @@ public:
 	void setShow(int value);
 	void setElement(TCElementBase *element);
  	TCElementBase* getElement();
+
 	/**
 	*设置所在矩阵中的位置
 	*/

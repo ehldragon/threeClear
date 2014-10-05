@@ -66,3 +66,12 @@ bool TCIce::canMove()
 	}
 	return false;
 }
+
+TCElementBase* TCIce::getMoveElement()
+{
+	if(this->fillingElement != NULL)
+	{
+		return this->fillingElement;
+	}
+	return NULL;
+}

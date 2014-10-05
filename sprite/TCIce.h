@@ -28,6 +28,7 @@ public:
 
 	virtual bool allowMoveIn();
 	virtual bool canMove();
+	virtual TCElementBase* getMoveElement();
 private:
 
 };

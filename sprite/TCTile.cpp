@@ -59,6 +59,28 @@ bool TCTile::isEmpty()
 	return true;
 }
 
+bool TCTile::canMove()
+{
+	//镂空的瓦块，以及没有element的空瓦块，都是不可以消除的。
+	if(getShow() == TILE_SHOW_NONE ||  m_element == NULL)
+	{
+		return false;
+	}
+	//由element决定能否被移动交换
+	return m_element->canMove();
+}
+
+bool TCTile::canClear()
+{
+	//镂空的瓦块，以及没有element的空瓦块，都是不可以交换的。
+	if(getShow() == TILE_SHOW_NONE ||  m_element == NULL)
+	{
+		return false;
+	}
+	//由element决定能否被移动交换
+	return m_element->canClear();
+}
+
 int TCTile::getRow(){
 	return m_row;
 }
@@ -117,6 +139,17 @@ void TCTile::setShow(int value)
 		this->initWithFile("threeclear/show1.png");
 	}
 }
+
+TCElementBase* TCTile::getMoveElement()
+{
+	if(m_element != NULL)
+	{
+		return m_element->getMoveElement();
+	}
+	return NULL;
+}
+
+
 
 
 
