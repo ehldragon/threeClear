@@ -39,8 +39,14 @@ public:
 	*/
 	bool clear();
 	
-	/*** 获取能够移动的对象*/
+	/*** 获取能够移动的element*/
 	TCElementBase* getMoveElement();
+	
+	/**设置能够移动的element， 滑动时候交换内容*/
+	void setMoveElement(TCElementBase *element);
+
+	/*** 获取能够消除的element*/
+	TCElementBase* getClearElement();
 
 	////////////////
 	int getRow();

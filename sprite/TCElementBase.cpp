@@ -25,6 +25,22 @@ TCElementBase* TCElementBase::getMoveElement()
 	return this;
 }
 
+void TCElementBase::setMoveElement(TCElementBase *element)
+{
+
+}
+
+
+TCElementBase* TCElementBase::getClearElement()
+{
+	return this;
+}
+
+int TCElementBase::getClearType()
+{
+	return -1;
+}
+
 void TCElementBase::setFillingElement(TCElementBase *element)
 {
 	element->retain();

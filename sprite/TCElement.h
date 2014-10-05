@@ -12,7 +12,7 @@ USING_NS_CC;
 class TCElement : public TCElementBase{
 private:
 	/**可消除的元素类型*/
-	int m_element;
+	int m_type;
 
 	/**普通状态，横行全消状态，竖行全消状态，爆炸状态*/
 	int m_state;
@@ -22,16 +22,13 @@ private:
 	
 public:
 	~TCElement();
-	CREATE_FUNC(TCElement);
+	static TCElement* create();
+	static TCElement* create(int type);
 
 	bool init();
 
-	bool clear();
-
-	/** 
-	 * 获取可消除元素类型
-	 */
-	int getElementValue();
+	virtual int getClearType();
+	virtual bool clear();
 
 private:
 

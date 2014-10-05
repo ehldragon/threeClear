@@ -25,10 +25,26 @@ public:
 	/**是否自身可以移动,默认返回true*/
 	virtual bool canMove();
 
-	/**在滑动、下落时，哪个对象应该被执行，默认是this本身
+	/**在滑动、下落时，获取哪个对象应该被执行。默认是this本身
 	*对于冰块来说，实际上应该是自己本身不动，交换内含的element
 	*/
 	virtual TCElementBase* getMoveElement();
+
+	/**在滑动、下落时，设置对象应该被执行
+	*对于冰块来说，实际上应该是自己本身不动，交换内含的element
+	*/
+	virtual void setMoveElement(TCElementBase *element);
+
+	/**获取可以被消除的元素,默认是this
+	*对于冰块来说，实际上应该是内含的element
+	*/
+	virtual TCElementBase* getClearElement();
+
+	/**  获取可消除元素类型,默认-1。
+	 * 用于标识可被消除element的种类，花色
+	 */
+	virtual int getClearType();
+
 	/**消除处理*/
 	virtual bool clear()=0;
 
