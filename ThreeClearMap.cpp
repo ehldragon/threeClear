@@ -177,10 +177,9 @@ void ThreeClearMap::swap(int srcRow, int srcCol, int dstRow, int dstCol){
 	if(!canTileSwap(dstRow,dstCol)){
 		return;// 行列索引不合法，返回
 	}
-	
 	TCTile* srcTile = m_map[srcRow][srcCol];
 	TCTile* dstTile = m_map[dstRow][dstCol];
-
+	
 	//获取每个瓦块中，真正能够被提取出来移动交换的element
 	TCElementBase *srcElement = srcTile->getMoveElement();
 	TCElementBase *dstElement = dstTile->getMoveElement();
