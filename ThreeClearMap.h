@@ -64,8 +64,8 @@ private:
 	CCArray *scanRowWith(TCTile *triggerTile);
 	CCArray *scanColWith(TCTile *triggerTile);
 
-	/*判断矩阵中一个瓦块是否出界，是否可以被消除，类型是否与指定类型相同*/
-	bool isTypeSameWith(int row, int col, int originalType);
+	/*判断矩阵中一个瓦块是否出界，是否可以被消除，类型是否与指定瓦块相同*/
+	bool isTypeSameWith(int row, int col, TCTile *originalTile);
 	/*消除瓦块*/
 	void clearTiles();
 

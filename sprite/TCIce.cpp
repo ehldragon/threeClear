@@ -67,29 +67,6 @@ bool TCIce::canMove()
 	return false;
 }
 
-TCElementBase* TCIce::getMoveElement()
-{
-	if(this->fillingElement != NULL)
-	{
-		return this->fillingElement;
-	}
-	return NULL;
-}
-
-void TCIce::setMoveElement(TCElementBase *element)
-{
-	this->setFillingElement(element);
-}
-
-TCElementBase* TCIce::getClearElement()
-{
-	if(this->fillingElement != NULL)
-	{
-		return this->fillingElement;
-	}
-	return NULL;
-}
-
 int TCIce::getClearType()
 {
 	TCElementBase *clearElement = getClearElement();

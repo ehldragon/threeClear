@@ -45,6 +45,11 @@ public:
 	 */
 	virtual int getClearType();
 
+	/**  判断与指定可被消除元素的类型是否相同，即：花色是否相同,
+	 *	默认返回false
+	 */
+	virtual bool isTypeEqualTo(TCElementBase *element);
+
 	/**消除处理*/
 	virtual bool clear()=0;
 

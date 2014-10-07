@@ -395,26 +395,25 @@ CCArray *ThreeClearMap::scanRowWith(TCTile *triggerTile)
 	int row = triggerTile->getRow();
 	int col = triggerTile->getCol();
 
-	TCElementBase *triggerTileElement = triggerTile->getClearElement();
 	/*查看左边的第一个*/
-	if(isTypeSameWith(row, col-1, triggerTileElement->getClearType()))
+	if(isTypeSameWith(row, col-1, triggerTile))
 	{
 		TCTile *leftTile1 = m_map[row][col-1];
 		array->addObject(leftTile1);
 		/*再查看左边的第二个*/
-		if(isTypeSameWith(row, col-2, triggerTileElement->getClearType()))
+		if(isTypeSameWith(row, col-2, triggerTile))
 		{
 			TCTile *leftTile2 = m_map[row][col-2];
 			array->addObject(leftTile2);
 		}
 	}
 	/*查看右边的第一个*/
-	if(isTypeSameWith(row, col+1, triggerTileElement->getClearType()))
+	if(isTypeSameWith(row, col+1, triggerTile))
 	{
 		TCTile *rightTile1 = m_map[row][col+1];
 		array->addObject(rightTile1);
 		/*再查看左边的第二个*/
-		if(isTypeSameWith(row, col+2, triggerTileElement->getClearType()))
+		if(isTypeSameWith(row, col+2, triggerTile))
 		{
 			TCTile *rightTile2 = m_map[row][col+2];
 			array->addObject(rightTile2);
@@ -433,26 +432,25 @@ CCArray *ThreeClearMap::scanColWith(TCTile *triggerTile)
 	int row = triggerTile->getRow();
 	int col = triggerTile->getCol();
 
-	TCElementBase *triggerTileElement = triggerTile->getClearElement();
 	/*查看上边边的第一个*/
-	if(isTypeSameWith(row-1, col, triggerTileElement->getClearType()))
+	if(isTypeSameWith(row-1, col, triggerTile))
 	{
 		TCTile *upTile1 = m_map[row-1][col];
 		array->addObject(upTile1);
 		/*再查看上边的第二个*/
-		if(isTypeSameWith(row-2, col, triggerTileElement->getClearType()))
+		if(isTypeSameWith(row-2, col, triggerTile))
 		{
 			TCTile *upTile2 = m_map[row-2][col];
 			array->addObject(upTile2);
 		}
 	}
 	/*查看下边边的第一个*/
-	if(isTypeSameWith(row+1, col, triggerTileElement->getClearType()))
+	if(isTypeSameWith(row+1, col, triggerTile))
 	{
 		TCTile *downTile1 = m_map[row+1][col];
 		array->addObject(downTile1);
 		/*再查看左边的第二个*/
-		if(isTypeSameWith(row+2, col, triggerTileElement->getClearType()))
+		if(isTypeSameWith(row+2, col, triggerTile))
 		{
 			TCTile *downTile2 = m_map[row+2][col];
 			array->addObject(downTile2);
@@ -465,17 +463,15 @@ CCArray *ThreeClearMap::scanColWith(TCTile *triggerTile)
 	return array;
 }
 
-bool ThreeClearMap::isTypeSameWith(int row, int col, int originalType)
+bool ThreeClearMap::isTypeSameWith(int row, int col, TCTile *originalTile)
 {
 	if(!canTileClear(row, col)){
 		return false;
 	}
 
+	TCElementBase *originalElement = originalTile->getClearElement();
 	TCTile *tile = m_map[row][col];
 	TCElementBase *tileElement = tile->getClearElement();
-	if(tileElement && tileElement->getClearType() == originalType)
-	{
-		return true;
-	}
-	return false;
+
+	return tileElement->isTypeEqualTo(originalElement) ;
 }

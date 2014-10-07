@@ -149,19 +149,41 @@ TCElementBase* TCTile::getMoveElement()
 	return NULL;
 }
 
+// void TCTile::setMoveElement(TCElementBase *element)
+// {
+// 	if(m_element != NULL)
+// 	{
+// 		//如果是冰块，笼子等可嵌套的，实际移动的是被嵌套的element
+// 		if(m_element->getMoveElement() != m_element)
+// 		{
+// 			m_element->setMoveElement(element);
+// 		}
+// 		else
+// 		{
+// 			setElement(element);
+// 		}
+// 	}
+// }
+
 void TCTile::setMoveElement(TCElementBase *element)
 {
-	if(m_element != NULL)
+	if(!canMove()){
+		return ;
+	}
+
+	if(m_element == NULL)
 	{
-		//如果是冰块，笼子等可嵌套的，实际移动的是被嵌套的element
-		if(m_element->getMoveElement() != m_element)
-		{
-			m_element->setMoveElement(element);
-		}
-		else
-		{
-			m_element = element;
-		}
+		setElement(element);
+		return;
+	}
+
+	//如果是冰块，笼子等可嵌套的，实际移动的是被嵌套的element
+	//如果是不可嵌套，直接就要被消除的，则直接进行set
+	if(m_element->allowMoveIn()){
+		m_element->setMoveElement(element);
+	}
+	else{
+		setElement(element);
 	}
 }
 

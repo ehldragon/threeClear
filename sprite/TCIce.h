@@ -28,9 +28,6 @@ public:
 
 	virtual bool allowMoveIn();
 	virtual bool canMove();
-	virtual TCElementBase* getMoveElement();
-	virtual void setMoveElement(TCElementBase *element);
-	virtual TCElementBase* getClearElement();
 	virtual int getClearType();
 
 private:

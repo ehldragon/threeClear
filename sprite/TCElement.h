@@ -14,8 +14,11 @@ private:
 	/**可消除的元素类型*/
 	int m_type;
 
-	/**普通状态，横行全消状态，竖行全消状态，爆炸状态*/
-	int m_state;
+	/**可消除的元素超级状态类型
+	*普通状态，横全消，竖全消
+	*默认值-1
+	*/
+	int m_superType;
 	
 private:
 	TCElement();
@@ -28,6 +31,7 @@ public:
 	bool init();
 
 	virtual int getClearType();
+	virtual bool isTypeEqualTo(TCElementBase *);
 	virtual bool clear();
 
 private:

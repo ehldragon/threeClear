@@ -1,7 +1,8 @@
 #include "TCElement.h"
 #include "../CJCImgConfig.h"
+#include "../ThreeClearConstants.h"
 
-TCElement::TCElement():m_state(0),m_type(0)
+TCElement::TCElement():m_superType(0),m_type(0)
 {
 
 }
@@ -48,7 +49,6 @@ bool TCElement::init()
 	return true;
 }
 
-
 int TCElement::getClearType()
 {
 	return m_type;
@@ -56,5 +56,18 @@ int TCElement::getClearType()
 
 bool TCElement::clear()
 {
+	return false;
+}
+
+bool TCElement::isTypeEqualTo(TCElementBase *element)
+{
+	if(m_type == TILE_ELEMENT_BOMB){
+		return true;
+	}
+	
+	TCElementBase *clearElement = element->getClearElement();
+	if(m_type == clearElement->getClearType()){
+		return true;
+	}
 	return false;
 }
