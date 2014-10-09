@@ -27,10 +27,14 @@ public:
 	~TCElement();
 	static TCElement* create();
 	static TCElement* create(int type);
+	static TCElement* TCElement::create(int type, int superType);
 
 	bool init();
 
 	virtual int getClearType();
+	virtual void setClearType(int superType);
+	virtual int getSuperClearType();
+	virtual void setSuperClearType(int superType);
 	virtual bool isTypeEqualTo(TCElementBase *);
 	virtual bool clear();
 

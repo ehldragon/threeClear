@@ -14,7 +14,7 @@ public:
 
 	virtual ~TCElementBase();
 
-	bool init();
+	virtual bool init();
 
 	/**是否允许填充进其他element，默认返回false*/
 	virtual bool allowMoveIn();
@@ -44,6 +44,12 @@ public:
 	 * 用于标识可被消除element的种类，花色
 	 */
 	virtual int getClearType();
+	virtual void setClearType(int type);
+	/**  获取可消除元素超级类型,默认-1。
+	 * 用于标识可被消除element的超级效果：一行，一列，周围等
+	 */
+	virtual int getSuperClearType();
+	virtual void setSuperClearType(int superType);
 
 	/**  判断与指定可被消除元素的类型是否相同，即：花色是否相同,
 	 *	默认返回false
@@ -58,6 +64,7 @@ public:
 	//////////
 	void setFillingElement(TCElementBase *element);
 	TCElementBase* getFillingElement();
+
 protected:
 	/**被填充进来的其他element*/
 	TCElementBase *fillingElement;

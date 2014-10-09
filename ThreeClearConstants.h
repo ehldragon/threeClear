@@ -24,14 +24,14 @@ static const int TILE_ELEMENT_3 = 3;
 static const int TILE_ELEMENT_4 = 4;
 static const int TILE_ELEMENT_5 = 5;
 static const int TILE_ELEMENT_6 = 6;
-static const int TILE_ELEMENT_BOMB = 100; 
+
 
 /**可消除元素的超级状态*/
+static const int TILE_SUPER_ELEMENT_NONE = 0; //没有超级状态
 static const int TILE_SUPER_ELEMENT_ROW = 1; //消除一整行
 static const int TILE_SUPER_ELEMENT_COLUMN = 2; //消除一整列
 static const int TILE_SUPER_ELEMENT_SURROUND = 3; //消除周边两圈范围
-
-
+static const int TILE_SUPER_ELEMENT_BOMB = 4; //五连消生成的炸弹效果
 
 /**地图中元素的层*/
 static const int MAP_ZORDER_SHOW = 1;

@@ -21,6 +21,5 @@ bool ThreeClearScene::init()
 	ThreeClearMap* map = ThreeClearMap::create();
 	addChild(map, 0, 1);
 
-
 	return true;
 }

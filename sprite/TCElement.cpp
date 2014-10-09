@@ -2,7 +2,7 @@
 #include "../CJCImgConfig.h"
 #include "../ThreeClearConstants.h"
 
-TCElement::TCElement():m_superType(0),m_type(0)
+TCElement::TCElement():m_superType(TILE_SUPER_ELEMENT_NONE),m_type(0)
 {
 
 }
@@ -40,6 +40,15 @@ TCElement* TCElement::create(int type)
 	return NULL;
 }
 
+TCElement* TCElement::create(int type, int superType)
+{
+	TCElement *elementSprite = TCElement::create(type);
+	if(elementSprite){
+		elementSprite->m_superType = superType;
+	}
+	return elementSprite;
+}
+
 bool TCElement::init()
 {
 	if(!TCElementBase::init()){
@@ -54,6 +63,11 @@ int TCElement::getClearType()
 	return m_type;
 }
 
+int TCElement::getSuperClearType()
+{
+	return m_superType;
+} 
+
 bool TCElement::clear()
 {
 	return false;
@@ -61,7 +75,7 @@ bool TCElement::clear()
 
 bool TCElement::isTypeEqualTo(TCElementBase *element)
 {
-	if(m_type == TILE_ELEMENT_BOMB){
+	if(m_superType == TILE_SUPER_ELEMENT_BOMB){
 		return true;
 	}
 	
@@ -70,4 +84,14 @@ bool TCElement::isTypeEqualTo(TCElementBase *element)
 		return true;
 	}
 	return false;
+}
+
+void TCElement::setClearType(int type)
+{
+	m_type = type;
+}
+
+void TCElement::setSuperClearType(int superType)
+{
+	m_superType = superType;
 }

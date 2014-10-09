@@ -67,6 +67,13 @@ int TCElementBase::getClearType()
 	return -1;
 }
 
+
+int TCElementBase::getSuperClearType()
+{
+	return -1;
+}
+
+
 bool TCElementBase::isTypeEqualTo(TCElementBase *element)
 {
 	return false;
@@ -107,6 +114,16 @@ bool TCElementBase::canClear()
 bool TCElementBase::canMove()
 {
 	return true;
+}
+
+void TCElementBase::setClearType(int type)
+{
+
+}
+
+void TCElementBase::setSuperClearType(int superType)
+{
+
 }
 
 

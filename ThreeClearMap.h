@@ -41,6 +41,7 @@ private:
 	 */
 	void swap(int srcRow, int srcCol, int dstRow, int dstCol);
 
+	/*没有消除元素时，复原瓦块位置和数据*/
 	void reverse(int srcRow, int srcCol, int dstRow, int dstCol);
 	/** 
 	 * 是否是合法的行列索引
@@ -57,8 +58,15 @@ private:
 	 */
 	bool canTileClear(int row, int col);
 
+	/*滑动交换后，扫描是否有符合条件，可以被消除的瓦块*/
+	bool scanClearAfterSwap();
+	/*滑动交换后的消除瓦块处理*/
+	void clearTilesAfterSwap();
+
 	/*扫描是否有符合条件，可以被消除的瓦块*/
-	bool scanClear();
+	bool scanClearNoSwap();
+	/*消除瓦块处理*/
+	void clearTilesNoSwap();
 
 	/*扫描行、列中的可消除瓦块，以一个瓦块作为中点，左右上下扫描*/
 	CCArray *scanRowWith(TCTile *triggerTile);
@@ -66,8 +74,7 @@ private:
 
 	/*判断矩阵中一个瓦块是否出界，是否可以被消除，类型是否与指定瓦块相同*/
 	bool isTypeSameWith(int row, int col, TCTile *originalTile);
-	/*消除瓦块*/
-	void clearTiles();
+	
 
 	/*将瓦块对象插入指定的数组中，保证不能有重复的*/
 	void addTileToArray(CCArray *array, CCObject *object);

@@ -1,5 +1,6 @@
 #include "ThreeClearMap.h"
 #include "sprite/TCElementSpritesState.h"
+#include "algorithm/clearFactory.h"
 
 ThreeClearMap::ThreeClearMap()
 {
@@ -59,8 +60,18 @@ bool ThreeClearMap::testInit()
 	TCTile *tile = m_map[1][2];
 	tile->setElement(TCElement::create());
 
-	tile = m_map[2][1];
+	tile = m_map[1][6];
 	tile->setElement(TCElement::create());
+
+	tile = m_map[1][7];
+	tile->setElement(TCElement::create());
+
+	tile = m_map[1][8];
+	tile->setElement(TCElement::create());
+
+
+	tile = m_map[2][1];
+	tile->setElement(TCElement::create(TILE_ELEMENT_1, TILE_SUPER_ELEMENT_ROW));
 
 	tile = m_map[2][2];
 	tile->setElement(TCElement::create(2));
@@ -71,15 +82,37 @@ bool ThreeClearMap::testInit()
 	tile = m_map[2][4];
 	tile->setElement(TCElement::create());
 
+	tile = m_map[2][7];
+	tile->setElement(TCElement::create(TILE_ELEMENT_2, TILE_SUPER_ELEMENT_SURROUND));
+
+	tile = m_map[2][8];
+	tile->setElement(TCElement::create(2));
+
 	tile = m_map[3][2];
 	tile->setElement(TCElement::create());
 	tile = m_map[3][3];
+	tile->setElement(TCElement::create());
+
+	tile = m_map[3][6];
+	tile->setElement(TCElement::create());
+	tile = m_map[3][7];
+	tile->setElement(TCElement::create());
+	tile = m_map[3][8];
 	tile->setElement(TCElement::create());
 
 	tile = m_map[4][2];
 	tile->setElement(TCElement::create());
 	tile = m_map[4][3];
 	tile->setElement(TCElement::create());
+	tile = m_map[4][7];
+	tile->setElement(TCElement::create());
+
+	tile = m_map[6][7];
+	tile->setElement(TCElement::create());
+	tile = m_map[7][7];
+	tile->setElement(TCElement::create(TILE_ELEMENT_1, TILE_SUPER_ELEMENT_ROW));
+	tile = m_map[7][2];
+	tile->setElement(TCElement::create(TILE_ELEMENT_2, TILE_SUPER_ELEMENT_COLUMN));
 
 	return true;
 }
@@ -227,7 +260,7 @@ void ThreeClearMap::swap(int srcRow, int srcCol, int dstRow, int dstCol){
 	CCPoint srcPoint = getPoint(srcTile->getRow(), srcTile->getCol());
 	CCPoint dstPoint = getPoint(dstTile->getRow(), dstTile->getCol());
 	CCAction *swapElementAction = CCCallFunc::create(this, callfunc_selector(ThreeClearMap::swapElement));
-	CCAction *clearTilesAction = CCCallFunc::create(this, callfunc_selector(ThreeClearMap::clearTiles));
+	CCAction *clearTilesAction = CCCallFunc::create(this, callfunc_selector(ThreeClearMap::clearTilesAfterSwap));
 
 	srcElement->runAction(CCSequence::create(
 		CCMoveTo::create(0.2f, dstPoint),
@@ -323,25 +356,55 @@ bool ThreeClearMap::canTileClear(int row, int col)
 	return false;
 }
 
-bool ThreeClearMap::scanClear()
+bool ThreeClearMap::scanClearAfterSwap()
 {
 	if(m_srcSwapTile == NULL || m_dstSwapTile == NULL){
 		return false;
 	}
+	//获取相关算法，进行扫描
+	clearAlgorithm *algorithm = clearFactory::sharedClearFactory()->getAlgoritm(m_srcSwapTile, m_dstSwapTile, m_map);
+	CCArray *clearTileArray = algorithm->scanClearTiles(m_srcSwapTile, m_dstSwapTile);
+	//没有值说明没有可以被消除的瓦块
+	if(clearTileArray == NULL){
+		return false;
+	}
+
+	clearTileArray->retain();
+	m_clearTileArray->release();
+	m_clearTileArray = clearTileArray;
+	
+	//触发点扫描完毕，清空触发点容器
+	m_triggerTileArray->removeAllObjects();
+	if(m_clearTileArray->count() == 0)
+	{
+		return false;
+	}
+
+
+	//for testCC
+	CCObject *obj = NULL;
+	CCARRAY_FOREACH(m_clearTileArray, obj)
+	{
+		TCTile *tile = (TCTile *)obj;
+		CCLOG("[%d][%d]", tile->getRow(), tile->getCol());
+	}
+	return true;
+}
+
+bool ThreeClearMap::scanClearNoSwap()
+{
+	if(m_triggerTileArray->count() == 0){
+		return false;
+	}
+
+	clearAlgorithm *algorithm = clearFactory::sharedClearFactory()->getDefaultAlgoritm(m_map);
 	//遍历从各个触发点开始，以该点为中心，找到5x5矩阵中是否有可被消除的点。
-	for(int index = 0; index < m_triggerTileArray->count(); index++)
+	for(unsigned int index = 0; index < m_triggerTileArray->count(); index++)
 	{
 		TCTile *triggerTile = (TCTile *)m_triggerTileArray->objectAtIndex(index);
-		/*扫描行，将符合条件的瓦块挑选出来*/
-		CCArray *rowClearArray = scanRowWith(triggerTile);
-		if(rowClearArray != NULL){
-			addArrayToArray(rowClearArray, m_clearTileArray);
-		}
-
-		/*扫描列，将符合条件的瓦块挑选出来*/
-		CCArray *colClearArray = scanColWith(triggerTile);
-		if(colClearArray != NULL){
-			addArrayToArray(colClearArray, m_clearTileArray);
+		CCArray *clearTileArray = algorithm->scanClearTiles(triggerTile);
+		if(clearTileArray != NULL){
+			addArrayToArray(clearTileArray, m_clearTileArray);
 		}
 	}
 	//触发点扫描完毕，清空触发点容器
@@ -353,18 +416,28 @@ bool ThreeClearMap::scanClear()
 	return true;
 }
 
-void ThreeClearMap::clearTiles()
+void ThreeClearMap::clearTilesAfterSwap()
 {
 	//如果没有需要消除的瓦块，需要将滑动的两个瓦块复原
-	if(!scanClear())
-	{
+	if(!scanClearAfterSwap()){
 		reverse(m_srcSwapTile->getRow(),
 			m_srcSwapTile->getCol(),
 			m_dstSwapTile->getRow(),
 			m_dstSwapTile->getCol());
 		return;
 	}
-	
+	//TODO:遍历m_clearTileArray，消除瓦块。
+	//TODO:将m_clearTileArray内容导入m_triggerTileArray；
+	m_clearTileArray->removeAllObjects();
+	return ;
+}
+
+void ThreeClearMap::clearTilesNoSwap()
+{
+	//如果没有需要消除的瓦块，直接返回
+	if(!scanClearNoSwap()){
+		return;
+	}
 	//TODO:遍历m_clearTileArray，消除瓦块。
 	//TODO:将m_clearTileArray内容导入m_triggerTileArray；
 	m_clearTileArray->removeAllObjects();
@@ -382,7 +455,7 @@ void ThreeClearMap::addTileToArray(CCArray *array, CCObject *obj)
 
 void ThreeClearMap::addArrayToArray(CCArray *srcArray,CCArray *dstArray)
 {
-	for(int index=0; index < srcArray->count(); index++)
+	for(unsigned int index=0; index < srcArray->count(); index++)
 	{
 		CCObject *obj = srcArray->objectAtIndex(index);
 		addTileToArray(dstArray, obj);
