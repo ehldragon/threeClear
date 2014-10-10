@@ -1,22 +1,28 @@
-#include "clearFactory.h"
-#include "simpleClear.h"
+#include "ClearFactory.h"
+#include "SimpleClear.h"
+#include "RuinClear.h"
+#include "SingleCrossClear.h"
+#include "MultiCrossClear.h"
 
 static bool isHasType(TCElementBase *element1, TCElementBase *element2, int superType1, int superType2);
-static clearFactory *s_sharedFactory;
-clearFactory* clearFactory::sharedClearFactory()
+static ClearFactory *s_sharedFactory;
+ClearFactory* ClearFactory::sharedClearFactory()
 {
 	if (!s_sharedFactory)
 	{
-		s_sharedFactory = new clearFactory();
+		s_sharedFactory = new ClearFactory();
 		s_sharedFactory->init();
 	}
 	return s_sharedFactory;
 }
 
-bool clearFactory::init()
+bool ClearFactory::init()
 {
-	m_simpleAlgorithm = simpleClear::create();
+	m_simpleAlgorithm = SimpleClear::create();
 	m_simpleAlgorithm->retain();
+
+	m_ruinAlgorithm = RuinClear::create();
+	m_ruinAlgorithm->retain();
 
 	return true;
 }
@@ -27,7 +33,7 @@ bool clearFactory::init()
 三三连消生成的为：C
 五连消生成的为:D
 */
-clearAlgorithm * clearFactory::getAlgoritm(TCTile *tile1, TCTile *tile2, MatrixPtr matrix)
+ClearAlgorithm * ClearFactory::getAlgoritm(TCTile *tile1, TCTile *tile2, MatrixPtr matrix)
 {
 	TCElementBase *element1 = tile1->getClearElement();
 	TCElementBase *element2 = tile2->getClearElement();
@@ -36,7 +42,7 @@ clearAlgorithm * clearFactory::getAlgoritm(TCTile *tile1, TCTile *tile2, MatrixP
 		return NULL;
 	}
 
-	clearAlgorithm *algorithm = NULL;
+	ClearAlgorithm *algorithm = NULL;
 	//A组合A，A组合B，A组合C
 	if(isHasType(element1, element2, TILE_SUPER_ELEMENT_NONE, TILE_SUPER_ELEMENT_NONE) ||
 		isHasType(element1, element2, TILE_SUPER_ELEMENT_NONE, TILE_SUPER_ELEMENT_ROW) ||
@@ -70,6 +76,7 @@ clearAlgorithm * clearFactory::getAlgoritm(TCTile *tile1, TCTile *tile2, MatrixP
 	else if(isHasType(element1, element2, TILE_SUPER_ELEMENT_BOMB, TILE_SUPER_ELEMENT_BOMB))
 	{
 		//D组合D
+		return m_ruinAlgorithm;
 	}
 
 	if(algorithm != NULL){
@@ -78,7 +85,7 @@ clearAlgorithm * clearFactory::getAlgoritm(TCTile *tile1, TCTile *tile2, MatrixP
 	return algorithm;
 }
 
-clearAlgorithm * clearFactory::getDefaultAlgoritm(MatrixPtr matrix)
+ClearAlgorithm * ClearFactory::getDefaultAlgoritm(MatrixPtr matrix)
 {
 	if(m_simpleAlgorithm != NULL){
 		m_simpleAlgorithm->setMatrix(matrix);
@@ -86,9 +93,7 @@ clearAlgorithm * clearFactory::getDefaultAlgoritm(MatrixPtr matrix)
 	return m_simpleAlgorithm;
 }
 
-// static const int TILE_SUPER_ELEMENT_ROW = 1; //消除一整行
-// static const int TILE_SUPER_ELEMENT_COLUMN = 2; //消除一整列
-// static const int TILE_SUPER_ELEMENT_SURROUND = 3; //消除周边两圈范围
+
 static bool isHasType(TCElementBase *element1, TCElementBase *element2, int superType1, int superType2)
 {
 	if(element1->getSuperClearType() == superType1 && element2->getSuperClearType() == superType2){

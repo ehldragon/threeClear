@@ -1,6 +1,6 @@
-#include "simpleClear.h"
+#include "SimpleClear.h"
 
-CCArray* simpleClear::scan(TCTile *triggerTile)
+CCArray* SimpleClear::scan(TCTile *triggerTile)
 {
 	if(triggerTile == NULL || matrix == NULL){
 		return NULL;
@@ -27,17 +27,19 @@ CCArray* simpleClear::scan(TCTile *triggerTile)
 	return clearTileArray;
 }
 
-CCArray* simpleClear::scanClearTiles(TCTile *triggerTile)
+CCArray* SimpleClear::scanClearTiles(TCTile *triggerTile)
 {
 	CCArray *clearTileArray = scan(triggerTile);
 	if(clearTileArray->count() == 0){
 		return NULL;
 	}
 
+	//还要进行一次递归扫描炸弹的操作
 	this->scanSuperTiles(clearTileArray);
 	return clearTileArray;
 }
-CCArray* simpleClear::scanClearTiles(TCTile *tileSrc, TCTile *tileDst)
+
+CCArray* SimpleClear::scanClearTiles(TCTile *tileSrc, TCTile *tileDst)
 {
 	if(tileSrc == NULL || tileDst == NULL || matrix == NULL){
 		return NULL;
@@ -58,12 +60,12 @@ CCArray* simpleClear::scanClearTiles(TCTile *tileSrc, TCTile *tileDst)
 	{
 		return NULL;
 	}
-
+	//还要进行一次递归扫描炸弹的操作
 	this->scanSuperTiles(clearTileArray);
 	return clearTileArray;
 }
 
-CCArray *simpleClear::scanRowWith(TCTile *triggerTile)
+CCArray *SimpleClear::scanRowWith(TCTile *triggerTile)
 {
 	CCArray *array = CCArray::createWithObject(triggerTile);
 	int row = triggerTile->getRow();
@@ -100,7 +102,7 @@ CCArray *simpleClear::scanRowWith(TCTile *triggerTile)
 	return array;
 }
 
-CCArray *simpleClear::scanColWith(TCTile *triggerTile)
+CCArray *SimpleClear::scanColWith(TCTile *triggerTile)
 {
  	CCArray *array = CCArray::createWithObject(triggerTile);
 	int row = triggerTile->getRow();

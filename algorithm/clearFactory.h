@@ -3,20 +3,21 @@
 
 #include "cocos2d.h"
 #include "../sprite/TCTile.h"
-#include "clearAlgorithm.h"
+#include "ClearAlgorithm.h"
 USING_NS_CC;
 
-class clearFactory : public CCObject{
+class ClearFactory : public CCObject{
 public:
-	static clearFactory* sharedClearFactory();
+	static ClearFactory* sharedClearFactory();
 	bool init();
 	/*获取一个消除算法*/
-	clearAlgorithm *getDefaultAlgoritm(MatrixPtr matrix);
+	ClearAlgorithm *getDefaultAlgoritm(MatrixPtr matrix);
 	/*获取一个消除算法*/
-	clearAlgorithm *getAlgoritm(TCTile *tile1, TCTile *tile2, MatrixPtr matrix);
+	ClearAlgorithm *getAlgoritm(TCTile *tile1, TCTile *tile2, MatrixPtr matrix);
 
 private:
-	clearAlgorithm *m_simpleAlgorithm;
+	ClearAlgorithm *m_simpleAlgorithm;
+	ClearAlgorithm *m_ruinAlgorithm;
 };
 
 #endif

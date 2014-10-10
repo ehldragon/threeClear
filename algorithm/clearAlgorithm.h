@@ -10,9 +10,9 @@ typedef TCTile* (*MatrixPtr)[MAP_COL_COUNT];
 /************************************************************************/
 /* 消除算法的基类，每种情况的消除算法集成该基类去实现								*/
 /************************************************************************/
-class clearAlgorithm : public CCObject{
+class ClearAlgorithm : public CCObject{
 public:
-	virtual ~clearAlgorithm();
+	virtual ~ClearAlgorithm();
 
 	virtual bool init();
 
@@ -55,6 +55,7 @@ protected:
 	CCArray* getRelates(TCTile *tile, CCArray *rootArray);
 
 	CCArray* getMatrixScale(int rowBegin, int rowEnd, int colBegin, int colEnd, CCArray *rootArray);
+	CCArray* getMatrixScale(int rowBegin, int rowEnd, int colBegin, int colEnd);
 
 	CCArray* getMatrixSurrond(int rowBegin, int colBegin, CCArray *rootArray);
 

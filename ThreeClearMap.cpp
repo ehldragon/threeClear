@@ -362,7 +362,7 @@ bool ThreeClearMap::scanClearAfterSwap()
 		return false;
 	}
 	//获取相关算法，进行扫描
-	clearAlgorithm *algorithm = clearFactory::sharedClearFactory()->getAlgoritm(m_srcSwapTile, m_dstSwapTile, m_map);
+	ClearAlgorithm *algorithm = ClearFactory::sharedClearFactory()->getAlgoritm(m_srcSwapTile, m_dstSwapTile, m_map);
 	CCArray *clearTileArray = algorithm->scanClearTiles(m_srcSwapTile, m_dstSwapTile);
 	//没有值说明没有可以被消除的瓦块
 	if(clearTileArray == NULL){
@@ -397,7 +397,7 @@ bool ThreeClearMap::scanClearNoSwap()
 		return false;
 	}
 
-	clearAlgorithm *algorithm = clearFactory::sharedClearFactory()->getDefaultAlgoritm(m_map);
+	ClearAlgorithm *algorithm = ClearFactory::sharedClearFactory()->getDefaultAlgoritm(m_map);
 	//遍历从各个触发点开始，以该点为中心，找到5x5矩阵中是否有可被消除的点。
 	for(unsigned int index = 0; index < m_triggerTileArray->count(); index++)
 	{

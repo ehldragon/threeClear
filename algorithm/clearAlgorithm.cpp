@@ -1,27 +1,26 @@
-#include "clearAlgorithm.h"
+#include "ClearAlgorithm.h"
 
-clearAlgorithm::~clearAlgorithm()
+ClearAlgorithm::~ClearAlgorithm()
 {
 
 }
 
-bool clearAlgorithm::init()
+bool ClearAlgorithm::init()
 {
 	return true;
 }
 
-CCArray* clearAlgorithm::scanClearTiles(TCTile *tileSrc, TCTile *tileDst)
+CCArray* ClearAlgorithm::scanClearTiles(TCTile *tileSrc, TCTile *tileDst)
 {
 	return NULL;
 }
 
-CCArray* clearAlgorithm::scanClearTiles(TCTile *triggerTile)
+CCArray* ClearAlgorithm::scanClearTiles(TCTile *triggerTile)
 {
 	return NULL;
 }
 
-
-bool clearAlgorithm::canTileClear(int row, int col)
+bool ClearAlgorithm::canTileClear(int row, int col)
 {
 	if(!isValidRowCol(row, col)){
 		return false;// 行列索引不合法，返回
@@ -33,7 +32,7 @@ bool clearAlgorithm::canTileClear(int row, int col)
 	return false;
 }
 
-bool clearAlgorithm::isValidRowCol(int row, int col){
+bool ClearAlgorithm::isValidRowCol(int row, int col){
 	if(row<0 || row>=MAP_ROW_COUNT){
 		return false;
 	}
@@ -43,7 +42,7 @@ bool clearAlgorithm::isValidRowCol(int row, int col){
 	return true;
 }
 
-bool clearAlgorithm::isTypeSameWith(int row, int col, TCTile *originalTile)
+bool ClearAlgorithm::isTypeSameWith(int row, int col, TCTile *originalTile)
 {
 	if(!canTileClear(row, col)){
 		return false;
@@ -56,12 +55,12 @@ bool clearAlgorithm::isTypeSameWith(int row, int col, TCTile *originalTile)
 	return tileElement->isTypeEqualTo(originalElement) ;
 }
 
-void clearAlgorithm::setMatrix(MatrixPtr newMatrix)
+void ClearAlgorithm::setMatrix(MatrixPtr newMatrix)
 {
 	matrix = newMatrix;
 }
 
-void clearAlgorithm::addTileToArray(CCArray *array, CCObject *obj)
+void ClearAlgorithm::addTileToArray(CCArray *array, CCObject *obj)
 {
 	if(!array->containsObject(obj))
 	{
@@ -69,7 +68,7 @@ void clearAlgorithm::addTileToArray(CCArray *array, CCObject *obj)
 	}
 }
 
-void clearAlgorithm::addArrayToArray(CCArray *srcArray,CCArray *dstArray)
+void ClearAlgorithm::addArrayToArray(CCArray *srcArray,CCArray *dstArray)
 {
 	for(unsigned int index=0; index < srcArray->count(); index++)
 	{
@@ -78,7 +77,7 @@ void clearAlgorithm::addArrayToArray(CCArray *srcArray,CCArray *dstArray)
 	}
 }
 
-void clearAlgorithm::scanSuperTiles(CCArray *clearTilesArray)
+void ClearAlgorithm::scanSuperTiles(CCArray *clearTilesArray)
 {
 	if(!clearTilesArray){
 		return ;
@@ -93,7 +92,7 @@ void clearAlgorithm::scanSuperTiles(CCArray *clearTilesArray)
 	}
 }
 
-void clearAlgorithm::scanSuperTile(TCTile *startTile, CCArray *rootArray)
+void ClearAlgorithm::scanSuperTile(TCTile *startTile, CCArray *rootArray)
 {
 	if(!startTile || !rootArray){
 		return ;
@@ -111,7 +110,7 @@ void clearAlgorithm::scanSuperTile(TCTile *startTile, CCArray *rootArray)
 	}
 }
 
-CCArray* clearAlgorithm::getRelates(TCTile *tile, CCArray *rootArray)
+CCArray* ClearAlgorithm::getRelates(TCTile *tile, CCArray *rootArray)
 {
 	TCElementBase *element = tile->getClearElement();
 	int superClearType = element->getSuperClearType();
@@ -137,7 +136,7 @@ CCArray* clearAlgorithm::getRelates(TCTile *tile, CCArray *rootArray)
 	return NULL;
 }
 
-CCArray* clearAlgorithm::getMatrixScale(int rowBegin, int rowEnd, int colBegin, int colEnd, CCArray *rootArray)
+CCArray* ClearAlgorithm::getMatrixScale(int rowBegin, int rowEnd, int colBegin, int colEnd, CCArray *rootArray)
 {
 	CCArray *array = CCArray::create();
 	for(int row = rowBegin; row <= rowEnd; row++)
@@ -161,7 +160,27 @@ CCArray* clearAlgorithm::getMatrixScale(int rowBegin, int rowEnd, int colBegin, 
 	return array;
 }
 
-CCArray* clearAlgorithm::getMatrixSurrond(int rowBegin, int colBegin, CCArray *rootArray)
+CCArray* ClearAlgorithm::getMatrixScale(int rowBegin, int rowEnd, int colBegin, int colEnd)
+{
+	CCArray *array = CCArray::create();
+	for(int row = rowBegin; row <= rowEnd; row++)
+	{
+		for(int col = colBegin; col <= colEnd; col++)
+		{
+			if(!canTileClear(row, col)){
+				continue;
+			}
+			array->addObject(matrix[row][col]);
+		}
+	}
+
+	if(array->count() == 0){
+		return NULL;
+	}
+	return array;
+}
+
+CCArray* ClearAlgorithm::getMatrixSurrond(int rowBegin, int colBegin, CCArray *rootArray)
 {
 	CCArray *array = CCArray::create();
 	int scale = 2;
