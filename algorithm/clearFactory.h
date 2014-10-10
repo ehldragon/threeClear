@@ -18,6 +18,9 @@ public:
 private:
 	ClearAlgorithm *m_simpleAlgorithm;
 	ClearAlgorithm *m_ruinAlgorithm;
+	ClearAlgorithm *m_singleCrossAlgorithm;
+	ClearAlgorithm *m_multiCrossAlgorithm;
+	ClearAlgorithm *m_cloneAlgorithm;
 };
 
 #endif

@@ -75,10 +75,6 @@ bool TCElement::clear()
 
 bool TCElement::isTypeEqualTo(TCElementBase *element)
 {
-	if(m_superType == TILE_SUPER_ELEMENT_BOMB){
-		return true;
-	}
-	
 	TCElementBase *clearElement = element->getClearElement();
 	if(m_type == clearElement->getClearType()){
 		return true;

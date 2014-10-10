@@ -3,6 +3,7 @@
 #include "RuinClear.h"
 #include "SingleCrossClear.h"
 #include "MultiCrossClear.h"
+#include "CloneClear.h"
 
 static bool isHasType(TCElementBase *element1, TCElementBase *element2, int superType1, int superType2);
 static ClearFactory *s_sharedFactory;
@@ -24,6 +25,15 @@ bool ClearFactory::init()
 	m_ruinAlgorithm = RuinClear::create();
 	m_ruinAlgorithm->retain();
 
+	m_singleCrossAlgorithm = SingleCrossClear::create();
+	m_singleCrossAlgorithm->retain(); 
+
+	m_multiCrossAlgorithm = MultiCrossClear::create();
+	m_multiCrossAlgorithm->retain(); 
+
+	m_cloneAlgorithm = CloneClear::create();
+	m_cloneAlgorithm->retain(); 
+		
 	return true;
 }
 
@@ -51,32 +61,32 @@ ClearAlgorithm * ClearFactory::getAlgoritm(TCTile *tile1, TCTile *tile2, MatrixP
 	{
 		algorithm = m_simpleAlgorithm;
 	}
-	else if(isHasType(element1, element2, TILE_SUPER_ELEMENT_NONE, TILE_SUPER_ELEMENT_BOMB))
-	{
-		//A组合D
-	}
 	else if(isHasType(element1, element2, TILE_SUPER_ELEMENT_ROW, TILE_SUPER_ELEMENT_ROW) ||
-			isHasType(element1, element2, TILE_SUPER_ELEMENT_ROW, TILE_SUPER_ELEMENT_COLUMN) ||
-			isHasType(element1, element2, TILE_SUPER_ELEMENT_COLUMN, TILE_SUPER_ELEMENT_COLUMN))
+		isHasType(element1, element2, TILE_SUPER_ELEMENT_ROW, TILE_SUPER_ELEMENT_COLUMN) ||
+		isHasType(element1, element2, TILE_SUPER_ELEMENT_COLUMN, TILE_SUPER_ELEMENT_COLUMN))
 	{
 		//B组合B
+		algorithm = m_singleCrossAlgorithm;
 	}
 	else if(isHasType(element1, element2, TILE_SUPER_ELEMENT_ROW, TILE_SUPER_ELEMENT_SURROUND) ||
-			isHasType(element1, element2, TILE_SUPER_ELEMENT_COLUMN, TILE_SUPER_ELEMENT_SURROUND))
+			isHasType(element1, element2, TILE_SUPER_ELEMENT_COLUMN, TILE_SUPER_ELEMENT_SURROUND)||
+			isHasType(element1, element2, TILE_SUPER_ELEMENT_SURROUND, TILE_SUPER_ELEMENT_SURROUND))
 	{
-		//B组合C
+		//B组合C C组合C
+		algorithm = m_multiCrossAlgorithm;
 	}
 	else if(isHasType(element1, element2, TILE_SUPER_ELEMENT_ROW, TILE_SUPER_ELEMENT_BOMB) ||
 		isHasType(element1, element2, TILE_SUPER_ELEMENT_COLUMN, TILE_SUPER_ELEMENT_BOMB) || 
-		isHasType(element1, element2, TILE_SUPER_ELEMENT_SURROUND, TILE_SUPER_ELEMENT_BOMB))
+		isHasType(element1, element2, TILE_SUPER_ELEMENT_SURROUND, TILE_SUPER_ELEMENT_BOMB) || 
+		isHasType(element1, element2, TILE_SUPER_ELEMENT_NONE, TILE_SUPER_ELEMENT_BOMB))
 	{
-		//B组合D, C组合D
+		//A组合D，B组合D, C组合D
 
 	}
 	else if(isHasType(element1, element2, TILE_SUPER_ELEMENT_BOMB, TILE_SUPER_ELEMENT_BOMB))
 	{
 		//D组合D
-		return m_ruinAlgorithm;
+		algorithm = m_ruinAlgorithm;
 	}
 
 	if(algorithm != NULL){

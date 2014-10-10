@@ -24,6 +24,7 @@ static const int TILE_ELEMENT_3 = 3;
 static const int TILE_ELEMENT_4 = 4;
 static const int TILE_ELEMENT_5 = 5;
 static const int TILE_ELEMENT_6 = 6;
+static const int TILE_ELEMENT_BOMB = 100;
 
 
 /**可消除元素的超级状态*/
