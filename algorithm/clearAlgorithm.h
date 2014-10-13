@@ -12,6 +12,7 @@ typedef TCTile* (*MatrixPtr)[MAP_COL_COUNT];
 /************************************************************************/
 class ClearAlgorithm : public CCObject{
 public:
+	ClearAlgorithm();
 	virtual ~ClearAlgorithm();
 
 	virtual bool init();

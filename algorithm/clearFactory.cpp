@@ -81,7 +81,7 @@ ClearAlgorithm * ClearFactory::getAlgoritm(TCTile *tile1, TCTile *tile2, MatrixP
 		isHasType(element1, element2, TILE_SUPER_ELEMENT_NONE, TILE_SUPER_ELEMENT_BOMB))
 	{
 		//A组合D，B组合D, C组合D
-
+		algorithm = m_cloneAlgorithm;
 	}
 	else if(isHasType(element1, element2, TILE_SUPER_ELEMENT_BOMB, TILE_SUPER_ELEMENT_BOMB))
 	{

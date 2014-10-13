@@ -9,6 +9,7 @@ CCArray* SingleCrossClear::scanClearTiles(TCTile *tileSrc, TCTile *tileDst)
 
 	//先要执行SimpleClear消除操作,找出有普通三连消除的点
 	SimpleClear *simpleAlgorithm = SimpleClear::create();
+	simpleAlgorithm->setMatrix(this->matrix);
 	CCArray *clearTilesArray = simpleAlgorithm->scanClearTiles(tileSrc, tileDst);
 	if(!clearTilesArray){
 		clearTilesArray = CCArray::create();
@@ -17,23 +18,13 @@ CCArray* SingleCrossClear::scanClearTiles(TCTile *tileSrc, TCTile *tileDst)
 	int superType1 = tileSrc->getClearElement()->getSuperClearType();
 	int superType2 = tileDst->getClearElement()->getSuperClearType();
 
-	if(superType1 == superType2)
-	{
-		CCArray *lineArray = scan(tileSrc);
-		if(lineArray != NULL){
-			clearTilesArray->addObjectsFromArray(lineArray);
-		}
+	CCArray *lineArray1 = scan(tileSrc);
+	CCArray *lineArray2 = scan(tileDst);
+	if(lineArray1 != NULL){
+		this->addArrayToArray(lineArray1, clearTilesArray);
 	}
-	else
-	{
-		CCArray *lineArray1 = scan(tileSrc);
-		CCArray *lineArray2 = scan(tileDst);
-		if(lineArray1 != NULL){
-			this->addArrayToArray(lineArray1, clearTilesArray);
-		}
-		if(lineArray2 != NULL){
-			this->addArrayToArray(lineArray2, clearTilesArray);
-		}
+	if(lineArray2 != NULL){
+		this->addArrayToArray(lineArray2, clearTilesArray);
 	}
 
 	if(clearTilesArray->count() == 0){

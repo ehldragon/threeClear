@@ -1,5 +1,10 @@
 #include "ClearAlgorithm.h"
 
+ClearAlgorithm::ClearAlgorithm():matrix(NULL)
+{
+	
+}
+
 ClearAlgorithm::~ClearAlgorithm()
 {
 

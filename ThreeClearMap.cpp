@@ -58,7 +58,7 @@ bool ThreeClearMap::testInit()
 	}
 
 	TCTile *tile = m_map[1][2];
-	tile->setElement(TCElement::create());
+	tile->setElement(TCElement::create(TILE_ELEMENT_1));
 
 	tile = m_map[1][6];
 	tile->setElement(TCElement::create());
@@ -71,10 +71,10 @@ bool ThreeClearMap::testInit()
 
 
 	tile = m_map[2][1];
-	tile->setElement(TCElement::create(TILE_ELEMENT_1, TILE_SUPER_ELEMENT_ROW));
+	tile->setElement(TCElement::create(TILE_ELEMENT_1));
 
 	tile = m_map[2][2];
-	tile->setElement(TCElement::create(2));
+	tile->setElement(TCElement::create(TILE_ELEMENT_2, TILE_SUPER_ELEMENT_BOMB));
 
 	tile = m_map[2][3];
 	tile->setElement(TCElement::create());
@@ -83,10 +83,10 @@ bool ThreeClearMap::testInit()
 	tile->setElement(TCElement::create());
 
 	tile = m_map[2][7];
-	tile->setElement(TCElement::create(TILE_ELEMENT_2, TILE_SUPER_ELEMENT_SURROUND));
+	tile->setElement(TCElement::create(TILE_ELEMENT_2));
 
 	tile = m_map[2][8];
-	tile->setElement(TCElement::create(2));
+	tile->setElement(TCElement::create(TILE_ELEMENT_2));
 
 	tile = m_map[3][2];
 	tile->setElement(TCElement::create());
@@ -110,9 +110,9 @@ bool ThreeClearMap::testInit()
 	tile = m_map[6][7];
 	tile->setElement(TCElement::create());
 	tile = m_map[7][7];
-	tile->setElement(TCElement::create(TILE_ELEMENT_1, TILE_SUPER_ELEMENT_ROW));
+	tile->setElement(TCElement::create(TILE_ELEMENT_1));
 	tile = m_map[7][2];
-	tile->setElement(TCElement::create(TILE_ELEMENT_2, TILE_SUPER_ELEMENT_COLUMN));
+	tile->setElement(TCElement::create(TILE_ELEMENT_2));
 
 	return true;
 }
@@ -381,12 +381,13 @@ bool ThreeClearMap::scanClearAfterSwap()
 	}
 
 
-	//for testCC
+	//打印出消除的瓦块位置，测试用
 	CCObject *obj = NULL;
 	CCARRAY_FOREACH(m_clearTileArray, obj)
 	{
+		static int index = 0;
 		TCTile *tile = (TCTile *)obj;
-		CCLOG("[%d][%d]", tile->getRow(), tile->getCol());
+		CCLOG("%d:[%d][%d]", ++index, tile->getRow(), tile->getCol());
 	}
 	return true;
 }

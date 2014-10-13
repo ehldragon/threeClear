@@ -9,7 +9,7 @@ CCArray* RuinClear::scanClearTiles(TCTile *tileSrc, TCTile *tileDst)
 	CCArray *array = CCArray::create();
 	for(unsigned int row = 0; row < MAP_ROW_COUNT; row++)
 	{
-		for(unsigned int column = 0; column < MAP_COL_COUNT; row++)
+		for(unsigned int column = 0; column < MAP_COL_COUNT; column++)
 		{
 			if(!canTileClear(row, column))
 			{

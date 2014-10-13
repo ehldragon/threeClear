@@ -9,6 +9,7 @@ CCArray* MultiCrossClear::scanClearTiles(TCTile *tileSrc, TCTile *tileDst)
 
 	//先要执行SimpleClear消除操作,找出有普通三连消除的点
 	SimpleClear *simpleAlgorithm = SimpleClear::create();
+	simpleAlgorithm->setMatrix(this->matrix);
 	CCArray *clearTilesArray = simpleAlgorithm->scanClearTiles(tileSrc, tileDst);
 	if(!clearTilesArray){
 		clearTilesArray = CCArray::create();
