@@ -1,6 +1,7 @@
 #include "ThreeClearMap.h"
 #include "sprite/TCElementSpritesState.h"
 #include "algorithm/clearFactory.h"
+#include "sprite/TCGenerator.h"
 
 ThreeClearMap::ThreeClearMap()
 {
@@ -20,6 +21,8 @@ bool ThreeClearMap::init(){
  	testInit();
  	mapInit();
 	setTouchEnabled(true);
+
+	//TCGenerator *generater = TCGenerator::sharedGenerator();
 	return true;
 }
 
@@ -389,6 +392,9 @@ bool ThreeClearMap::scanClearAfterSwap()
 		TCTile *tile = (TCTile *)obj;
 		CCLOG("%d:[%d][%d]", ++index, tile->getRow(), tile->getCol());
 	}
+	TCGenerator *generater = TCGenerator::sharedGenerator();
+	TCElementBase *element = generater->getElement();
+
 	return true;
 }
 

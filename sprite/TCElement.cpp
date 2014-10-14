@@ -9,7 +9,7 @@ TCElement::TCElement():m_superType(TILE_SUPER_ELEMENT_NONE),m_type(0)
 
 TCElement::~TCElement()
 {
-
+	
 }
 
 TCElement* TCElement::create()
